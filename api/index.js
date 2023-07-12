@@ -239,13 +239,29 @@ app.put('/post',uploadMiddleware.single('file'), async (req,res) => {
 
 });
 
-app.get('/post', async (req,res) => {
-  res.json(
-    await Post.find()
-      .populate('author', ['username'])
-      .sort({createdAt: -1})
-      .limit(20)
-  );
+// app.get('/post', async (req,res) => {
+//   res.json(
+//     await Post.find()
+//       .populate('author', ['username'])
+//       .sort({createdAt: -1})
+//       .limit(20)
+//   );
+// });
+
+app.get("/post", async (req, res) => {
+  try {
+    let query = Post.find().sort({ createdAt: -1 }).limit(20);
+
+    if (req.query.populate === "author") {
+      query = query.populate("author", ["username"]);
+    }
+
+    const posts = await query.exec();
+    res.json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch posts" });
+  }
 });
 
 app.get('/post/:id', async (req, res) => {
