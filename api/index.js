@@ -15,11 +15,11 @@ const fs = require('fs');
 const salt = bcrypt.genSaltSync(10);
 const secret = 'asdfe45we45w345wegw345werjktjwertkj';
 
-app.use(cors({credentials:true,origin:'http://localhost:3000'}));
+app.use(cors({credentials:true,origin:'https://manh-phuong.github.io/frontend'}));
 app.use(express.json());
 app.use(cookieParser());
 //app.use('/uploads', express.static(__dirname + '/uploads'));
-app.use('/uploads', express.static('D:/FT/CN Web/mern-blog/uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 mongoose.connect('mongodb+srv://bachtuhoa2002:84h4EniDFUw8nQH2@cluster0.aosogya.mongodb.net/?retryWrites=true&w=majority');
 
@@ -253,5 +253,7 @@ app.get('/post/:id', async (req, res) => {
   res.json(postDoc);
 })
 
-app.listen(4000);
+const port = process.env.PORT || 4000;
+app.listen(port);
+
 //
